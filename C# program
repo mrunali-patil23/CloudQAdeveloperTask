@@ -1,0 +1,51 @@
+using System;
+using OpenQA.Selenium;
+using OpenQA.Selenium.Chrome;
+using OpenQA.Selenium.Support.UI;
+
+class AutomationPracticeFormTest
+{
+    static void Main(string[] args)
+    {
+        // Setup ChromeDriver
+        IWebDriver driver = new ChromeDriver();
+        driver.Navigate().GoToUrl("https://app.cloudqa.io/home/AutomationPracticeForm");
+        driver.Manage().Window.Maximize();
+
+        try
+        {
+            WebDriverWait wait = new WebDriverWait(driver, TimeSpan.FromSeconds(10));
+
+            // 1. Test First Name field (using Name attribute)
+            IWebElement firstNameField = wait.Until(d => d.FindElement(By.Name("firstname")));
+            firstNameField.Clear();
+            firstNameField.SendKeys("John");
+
+            // 2. Test Gender radio button (using XPath with visible text for robustness)
+            IWebElement genderMale = wait.Until(d => d.FindElement(By.XPath("//input[@type='radio' and @value='Male']")));
+            if (!genderMale.Selected)
+            {
+                genderMale.Click();
+            }
+
+            // 3. Test Date of Birth field (using ID)
+            IWebElement dobField = wait.Until(d => d.FindElement(By.Id("datepicker")));
+            dobField.Clear();
+            dobField.SendKeys("04/09/2025"); // Format may vary by locale
+
+            // Optional: Submit the form if needed
+            // driver.FindElement(By.Id("submit")).Click();
+
+            Console.WriteLine("All three fields were filled successfully.");
+
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine("Test failed: " + ex.Message);
+        }
+        finally
+        {
+            driver.Quit();
+        }
+    }
+}
