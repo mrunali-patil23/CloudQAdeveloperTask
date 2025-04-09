@@ -1,0 +1,2 @@
+# CloudQAdeveloperTask
+CloudQA developer Task
